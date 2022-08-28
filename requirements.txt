@@ -1,0 +1,8 @@
+selenium
+webdriver_manager
+pandas
+openpyxl
+sqlalchemy
+sqlalchemy_utils
+fastapi
+fastapi-sqlalchemy
