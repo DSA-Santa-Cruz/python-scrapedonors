@@ -6,7 +6,6 @@ from sqlalchemy_utils import database_exists, create_database
 from dotenv import dotenv_values
 
 config = dotenv_values("./.env")
-
 db_password = config.get("DB_PASSWORD")
 
 if db_password:
@@ -15,7 +14,6 @@ if db_password:
 else:
     engine = create_engine("postgresql://postgres@/finances")
 
-engine = create_engine("postgresql://postgres@/finances")
 if not database_exists(engine.url):
     create_database(engine.url)
 

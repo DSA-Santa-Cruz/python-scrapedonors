@@ -8,11 +8,10 @@ from models import Committee
 
 from dotenv import dotenv_values
 
+from dotenv import dotenv_values
+
 config = dotenv_values("./.env")
-print(config)
-
-db_password = config["DB_PASSWORD"]
-
+db_password = config.get("DB_PASSWORD")
 
 app = FastAPI()
 
