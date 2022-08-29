@@ -3,10 +3,9 @@ import pandas as pd
 import re
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
-import os
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 
-config = load_dotenv(".env")
+config = dotenv_values(".env")
 db_password = config["DB_PASSWORD"]
 
 if db_password:

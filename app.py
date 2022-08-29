@@ -8,9 +8,9 @@ from models import Committee
 # from models import Author as Con
 
 import os
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 
-config = load_dotenv(".env")
+config = dotenv_values(".env")
 db_password = config["DB_PASSWORD"]
 
 
