@@ -1,17 +1,17 @@
 from fastapi import FastAPI
 from fastapi_sqlalchemy import DBSessionMiddleware, db
-import os
 from models import Contribution
 from models import Donor
 from models import Committee
 
 # from models import Author as Con
 
-from dotenv import load_dotenv
-import os
+from dotenv import dotenv_values
 
-load_dotenv("./.env")
-db_password = os.getenv("DB_PASSWORD")
+config = dotenv_values("./.env")
+print(config)
+
+db_password = config["DB_PASSWORD"]
 
 
 app = FastAPI()
