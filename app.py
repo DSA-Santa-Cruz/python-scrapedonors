@@ -9,8 +9,10 @@ from models import Committee
 from dotenv import dotenv_values
 
 from dotenv import dotenv_values
+import os
 
-config = dotenv_values("./.env")
+dir_path = os.path.dirname(os.path.realpath(__file__))
+config = dotenv_values(dir_path + "/.env")
 db_password = config.get("DB_PASSWORD")
 
 app = FastAPI()

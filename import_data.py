@@ -8,8 +8,7 @@ import requests
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-print(dir_path)
-config = dotenv_values("./.env")
+config = dotenv_values(dir_path + "/.env")
 db_password = config.get("DB_PASSWORD")
 webhook = config.get("NETLIFY_WEBHOOK")
 
@@ -57,7 +56,7 @@ def get_donor_id(c):
 
 def import_data(path):
     # open files with pandas
-    datafiles = glob.glob(path)
+    datafiles = glob.glob(dir_path + path)
     for path in datafiles:
         # 460 monetary contributions
         schedule_a = pd.read_excel(path, sheet_name="A-Contributions").set_index(
