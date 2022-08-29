@@ -9,9 +9,8 @@ config = dotenv_values("./.env")
 
 db_password = config.get("DB_PASSWORD")
 
-print(db_password)
-
 if db_password:
+    print(db_password)
     engine = create_engine(f"postgresql://postgres:{db_password}@/finances")
 else:
     engine = create_engine("postgresql://postgres@/finances")
