@@ -6,9 +6,8 @@ from sqlalchemy_utils import database_exists, create_database
 from dotenv import dotenv_values
 
 config = dotenv_values("./.env")
-print(config)
 
-db_password = config[0]["DB_PASSWORD"]
+db_password = config.get("DB_PASSWORD")
 
 if db_password:
     engine = create_engine(f"postgresql://postgres:{db_password}@/finances")
