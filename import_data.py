@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from dotenv import dotenv_values
 import requests
+import os
 
 print("getcwd:      ", os.getcwd())
 print("__file__:    ", __file__)
