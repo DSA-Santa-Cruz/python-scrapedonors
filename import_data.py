@@ -6,6 +6,9 @@ from sqlalchemy_utils import database_exists, create_database
 from dotenv import dotenv_values
 import requests
 
+print("getcwd:      ", os.getcwd())
+print("__file__:    ", __file__)
+
 config = dotenv_values("./.env")
 db_password = config.get("DB_PASSWORD")
 webhook = config.get("NETLIFY_WEBHOOK")
