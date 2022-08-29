@@ -4,9 +4,11 @@ import re
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from dotenv import dotenv_values
+import requests
 
 config = dotenv_values("./.env")
 db_password = config.get("DB_PASSWORD")
+webhook = config.get("NETLIFY_WEBHOOK")
 
 if db_password:
     db_url = f"postgresql://postgres:{db_password}@/finances"
@@ -244,3 +246,7 @@ def import_data(path):
             committees.to_sql("committees", conn, if_exists="replace")
         else:
             print("dry")
+
+
+if webhook:
+    x = requests.post(webhook, json={})
