@@ -7,11 +7,11 @@ from models import Committee
 
 # from models import Author as Con
 
+from dotenv import load_dotenv
 import os
-from dotenv import dotenv_values
 
-config = dotenv_values(".env")
-db_password = config["DB_PASSWORD"]
+load_dotenv()
+db_password = os.getenv("DB_PASSWORD")
 
 
 app = FastAPI()

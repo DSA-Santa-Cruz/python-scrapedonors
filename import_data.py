@@ -3,10 +3,10 @@ import pandas as pd
 import re
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
-from dotenv import dotenv_values
-
-config = dotenv_values(".env")
-db_password = config["DB_PASSWORD"]
+from dotenv import load_dotenv
+import os
+load_dotenv()
+db_password = os.getenv("DB_PASSWORD")
 
 if db_password:
     engine = create_engine("postgresql://postgres:{db_password}@/finances")
