@@ -249,6 +249,5 @@ def import_data(path):
         else:
             print("dry")
 
-
-if webhook:
-    x = requests.post(webhook, json={})
+    if webhook:
+        x = requests.post(webhook, json={})
