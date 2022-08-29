@@ -10,8 +10,8 @@ from models import Committee
 import os
 from dotenv import load_dotenv
 
-load_dotenv(".env")
-db_password = os.environ.get("DB_PASSWORD")
+config = load_dotenv(".env")
+db_password = config["DB_PASSWORD"]
 
 
 app = FastAPI()
