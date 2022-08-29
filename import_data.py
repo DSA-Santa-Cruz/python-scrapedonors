@@ -7,9 +7,8 @@ from dotenv import dotenv_values
 import requests
 import os
 
-print("getcwd:      ", os.getcwd())
-print("__file__:    ", __file__)
-
+dir_path = os.path.dirname(os.path.realpath(__file__))
+print(dir_path)
 config = dotenv_values("./.env")
 db_password = config.get("DB_PASSWORD")
 webhook = config.get("NETLIFY_WEBHOOK")
