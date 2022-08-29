@@ -3,6 +3,16 @@ import pandas as pd
 import re
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
+import os
+from dotenv import load_dotenv
+
+load_dotenv(".env")
+
+db_password = os.environ.get("DB_PASSWORD")
+if db_password:
+    engine = create_engine("postgresql://postgres:{db_password}@/finances")
+else:
+    engine = create_engine("postgresql://postgres@/finances")
 
 engine = create_engine("postgresql://postgres@/finances")
 if not database_exists(engine.url):
@@ -217,37 +227,21 @@ def import_data(path):
         ]
         committees = committees[~committees.index.duplicated(keep="last")]
 
+        old_contributions = pd.read_sql_table("contributions", conn, index_col="id")
+        old_donors = pd.read_sql_table("donors", conn, index_col="donor_id")
+        old_committees = pd.read_sql_table("committees", conn, index_col="reporter_id")
+
+        contributions = pd.concat([contributions, old_contributions]).drop_duplicates(
+            keep="first"
+        )
+        donors = pd.concat([donors, old_donors]).drop_duplicates(keep="first")
+        committees = pd.concat([committees, old_committees]).drop_duplicates(
+            keep="first"
+        )
+
         if not dry:
-            contributions.to_sql("contributions", conn, if_exists="append")
-            donors.to_sql("donors", conn, if_exists="append")
-            committees.to_sql("committees", conn, if_exists="append")
+            contributions.to_sql("contributions", conn, if_exists="replace")
+            donors.to_sql("donors", conn, if_exists="replace")
+            committees.to_sql("committees", conn, if_exists="replace")
         else:
-            print(contributions)
-            print(donors)
-            print(committees)
-
-        # contributions.to_sql("donors", conn, if_exists="append")
-
-        # print(contributions)
-
-        # exit
-
-        # # not adding these yet
-
-        # # combine expenses
-        # expenditures = pd.concat(
-        #     [
-        #         f465p3,
-        #         f461p5,
-        #         schedule_d,
-        #         schedule_e,
-        #         schedule_f,
-        #         schedule_g,
-        #         f496,
-        #     ],
-        #     axis=0,
-        # )
-
-        # loans_made = schedule_h
-        # loans_received = schedule_b1
-        # loans_guarantors = schedule_b2
+            print("dry")

@@ -6,3 +6,4 @@ sqlalchemy
 sqlalchemy_utils
 fastapi
 fastapi-sqlalchemy
+psycopg2

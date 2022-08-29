@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi_sqlalchemy import DBSessionMiddleware, db
-
+import os
 from models import Contribution
 from models import Donor
 from models import Committee
@@ -11,12 +11,17 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv(".env")
+db_password = os.environ.get("DB_PASSWORD")
 
 
 app = FastAPI()
 
-# to avoid csrftokenError
-app.add_middleware(DBSessionMiddleware, db_url="postgresql://postgres@/finances")
+if db_password:
+    app.add_middleware(
+        DBSessionMiddleware, db_url="postgresql://postgres:{db_password}@/finances"
+    )
+else:
+    app.add_middleware(DBSessionMiddleware, db_url="postgresql://postgres@/finances")
 
 
 @app.get("/contributions")
@@ -47,12 +52,12 @@ async def contribution(uid):
 
 @app.get("/donors")
 async def contributions():
-    contributions = db.session.query(Donor).all()
-    return contributions
+    donors = db.session.query(Donor).all()
+    return donors
 
 
 @app.get("/donors/{uid}")
 async def contribution(uid):
     print(uid)
-    contribution = db.session.query(Donor).get(uid)
-    return contribution
+    donor = db.session.query(Donor).get(uid)
+    return donor
