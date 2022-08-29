@@ -5,11 +5,12 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from dotenv import load_dotenv
 import os
+
 load_dotenv()
 db_password = os.getenv("DB_PASSWORD")
 
 if db_password:
-    engine = create_engine("postgresql://postgres:{db_password}@/finances")
+    engine = create_engine(f"postgresql://postgres:{db_password}@/finances")
 else:
     engine = create_engine("postgresql://postgres@/finances")
 

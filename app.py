@@ -18,7 +18,7 @@ app = FastAPI()
 
 if db_password:
     app.add_middleware(
-        DBSessionMiddleware, db_url="postgresql://postgres:{db_password}@/finances"
+        DBSessionMiddleware, db_url=f"postgresql://postgres:{db_password}@/finances"
     )
 else:
     app.add_middleware(DBSessionMiddleware, db_url="postgresql://postgres@/finances")
