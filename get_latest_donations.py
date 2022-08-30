@@ -5,13 +5,16 @@ import os
 from webdriver_manager.chrome import ChromeDriverManager
 import zipfile
 import glob
+import os
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def get_latest_donations():
     url = "https://public.netfile.com/pub2/Default.aspx?aid=CRUZ"
 
     options = webdriver.ChromeOptions()
-    prefs = {"download.default_directory": os.getcwd() + "/downloads"}
+    prefs = {"download.default_directory": dir_path + "/downloads"}
     options.headless = True
     options.add_experimental_option("prefs", prefs)
 
@@ -33,7 +36,7 @@ def get_latest_donations():
         print(err)
 
     # unzip files
-    zipfiles = glob.glob("./downloads/*.zip")
+    zipfiles = glob.glob(dir_path + "/downloads/*.zip")
     for path in zipfiles:
         with zipfile.ZipFile(path, "r") as zip_ref:
-            zip_ref.extractall("./data")
+            zip_ref.extractall(dir_path + "./data")
