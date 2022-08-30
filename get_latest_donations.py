@@ -39,4 +39,4 @@ def get_latest_donations():
     zipfiles = glob.glob(dir_path + "/downloads/*.zip")
     for path in zipfiles:
         with zipfile.ZipFile(path, "r") as zip_ref:
-            zip_ref.extractall(dir_path + "./data")
+            zip_ref.extractall(dir_path + "/data")
