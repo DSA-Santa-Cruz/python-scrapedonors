@@ -12,6 +12,8 @@ config = dotenv_values(dir_path + "/.env")
 db_password = config.get("DB_PASSWORD")
 webhook = config.get("NETLIFY_WEBHOOK")
 
+engine = None
+
 if db_password:
     db_url = f"postgresql://postgres:{db_password}@/finances"
     engine = create_engine(db_url)
