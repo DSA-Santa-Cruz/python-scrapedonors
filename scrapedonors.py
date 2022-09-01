@@ -5,6 +5,6 @@ from get_latest_donations import get_latest_donations
 get_latest_donations()
 
 # process + import
-import_data("./data/*.xlsx")
+import_data("/data/*.xlsx")
 
 # build_site()

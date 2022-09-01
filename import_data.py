@@ -59,6 +59,7 @@ def get_donor_id(c):
 def import_data(path):
     # open files with pandas
     datafiles = glob.glob(dir_path + path)
+    print(dir_path + path)
     for path in datafiles:
         # 460 monetary contributions
         schedule_a = pd.read_excel(path, sheet_name="A-Contributions").set_index(
@@ -245,14 +246,16 @@ def import_data(path):
         )
 
         if not dry:
-            conn.execute(text("drop table if exists contributions"))
-            contributions.to_sql("contributions")
-            conn.execute(text("drop table if exists donors"))
-            donors.to_sql("donors", conn)
-            conn.execute(text("drop table if exists committees"))
-            committees.to_sql("committees", conn)
+            # conn.execute(text("drop table if exists contributions"))
+            contributions.to_sql("contributions", if_exists="replace")
+            # conn.execute(text("drop table if exists donors"))
+            donors.to_sql("donors", conn, if_exists="replace")
+            # conn.execute(text("drop table if exists committees"))
+            committees.to_sql("committees", conn, if_exists="replace")
 
         else:
+            print(contributions.iloc[0])
+            print(contributions.iloc[1])
             print("dry")
 
     if webhook:
