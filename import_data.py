@@ -245,9 +245,13 @@ def import_data(path):
         )
 
         if not dry:
-            contributions.to_sql("contributions", conn, if_exists="replace")
-            donors.to_sql("donors", conn, if_exists="replace")
-            committees.to_sql("committees", conn, if_exists="replace")
+            conn.execute("drop table contributions")
+            contributions.to_sql("contributions")
+            conn.execute("drop table donors")
+            donors.to_sql("donors", conn)
+            conn.execute("drop table committees")
+            committees.to_sql("committees", conn)
+
         else:
             print("dry")
 

@@ -7,8 +7,6 @@ from models import Committee
 # from models import Author as Con
 
 from dotenv import dotenv_values
-
-from dotenv import dotenv_values
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
