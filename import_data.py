@@ -247,7 +247,7 @@ def import_data(path):
 
         if not dry:
             # conn.execute(text("drop table if exists contributions"))
-            contributions.to_sql("contributions", if_exists="replace")
+            contributions.to_sql("contributions", conn, if_exists="replace")
             # conn.execute(text("drop table if exists donors"))
             donors.to_sql("donors", conn, if_exists="replace")
             # conn.execute(text("drop table if exists committees"))
