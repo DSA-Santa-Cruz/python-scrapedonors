@@ -1,7 +1,7 @@
 import glob
 import pandas as pd
 import re
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy_utils import database_exists, create_database
 from dotenv import dotenv_values
 import requests
@@ -245,11 +245,11 @@ def import_data(path):
         )
 
         if not dry:
-            conn.execute("drop table contributions")
+            conn.execute(text("drop table if exists contributions"))
             contributions.to_sql("contributions")
-            conn.execute("drop table donors")
+            conn.execute(text("drop table if exists donors"))
             donors.to_sql("donors", conn)
-            conn.execute("drop table committees")
+            conn.execute(text("drop table if exists committees"))
             committees.to_sql("committees", conn)
 
         else:
