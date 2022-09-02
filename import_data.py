@@ -27,7 +27,7 @@ if not database_exists(engine.url):
 
 conn = engine.connect()
 
-dry = True
+dry = False
 
 
 def get_type(c):
