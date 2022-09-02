@@ -6,11 +6,13 @@ from sqlalchemy_utils import database_exists, create_database
 from dotenv import dotenv_values
 import requests
 import os
+from time import sleep
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 config = dotenv_values(dir_path + "/.env")
 db_password = config.get("DB_PASSWORD")
 webhook = config.get("NETLIFY_WEBHOOK")
+discord = config.get("DISCORD_HOOK")
 
 engine = None
 
@@ -25,7 +27,7 @@ if not database_exists(engine.url):
 
 conn = engine.connect()
 
-dry = False
+dry = True
 
 
 def get_type(c):
@@ -59,7 +61,6 @@ def get_donor_id(c):
 def import_data(path):
     # open files with pandas
     datafiles = glob.glob(dir_path + path)
-    print(dir_path + path)
     for path in datafiles:
         # 460 monetary contributions
         schedule_a = pd.read_excel(path, sheet_name="A-Contributions").set_index(
@@ -237,6 +238,51 @@ def import_data(path):
         old_donors = pd.read_sql_table("donors", conn, index_col="donor_id")
         old_committees = pd.read_sql_table("committees", conn, index_col="reporter_id")
 
+        new_contributions = list(
+            set(contributions.index) - set(old_contributions.index)
+        )
+        nc_length = len(new_contributions)
+        if nc_length and nc_length < 10:
+            data = {
+                "content": "New Contributions Reported"  # f"{c.reporter_name} recieved ${amount} from {name} on {c.date}"
+            }
+            embeds = []
+            for idx in new_contributions:
+                i = contributions.index.get_loc(idx)
+                c = contributions.iloc[i]
+                amount = "{:,}".format(c.amount)
+                name = (
+                    str(c.donor_f_name) + " " + str(c.donor_l_name)
+                    if pd.notnull(c.donor_f_name)
+                    else str(c.donor_l_name)
+                )
+                embeds.append(
+                    {
+                        "title": c.reporter_name,
+                        "description": f"${amount} from {name} on {c.date.date()}",
+                        "type": "rich",
+                        "url": f"https://netfile-viz.netlify.app/donors/{c.donor_id}",
+                    }
+                )
+            data["embeds"] = embeds
+            print(data)
+            response = requests.post(discord, json=data)
+            print(response.content)
+            sleep(1)
+        elif nc_length:
+            data = {
+                "content": "New Contributions Reported"  # f"${amount} to {c.reporter_name} from {name} on {c.date}"
+            }
+            data["embeds"] = [
+                {
+                    # "description": "",
+                    "title": "See All Contributions",
+                    "url": "https://netfile-viz.netlify.app/",
+                }
+            ]
+            response = requests.post(discord, json=data)
+            print(response)
+
         contributions = pd.concat([contributions, old_contributions]).drop_duplicates(
             keep="first"
         )
@@ -254,9 +300,10 @@ def import_data(path):
             committees.to_sql("committees", conn, if_exists="replace")
 
         else:
-            print(contributions.iloc[0])
-            print(contributions.iloc[1])
+            # print(contributions.iloc[0])
+            # print(contributions.iloc[1])
             print("dry")
 
     if webhook:
         x = requests.post(webhook, json={})
+        sleep(360)
