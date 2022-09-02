@@ -265,9 +265,7 @@ def import_data(path):
                     }
                 )
             data["embeds"] = embeds
-            print(data)
             response = requests.post(discord, json=data)
-            print(response.content)
             sleep(1)
         elif nc_length:
             data = {
@@ -281,7 +279,6 @@ def import_data(path):
                 }
             ]
             response = requests.post(discord, json=data)
-            print(response)
 
         contributions = pd.concat([contributions, old_contributions]).drop_duplicates(
             keep="first"
