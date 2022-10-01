@@ -265,7 +265,7 @@ def import_data(path):
                     }
                 )
             data["embeds"] = embeds
-            # response = requests.post(discord, json=data)
+            response = requests.post(discord, json=data)
             sleep(1)
         elif nc_length:
             data = {
