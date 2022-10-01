@@ -265,7 +265,7 @@ def import_data(path):
                     }
                 )
             data["embeds"] = embeds
-            response = requests.post(discord, json=data)
+            # response = requests.post(discord, json=data)
             sleep(1)
         elif nc_length:
             data = {
@@ -278,15 +278,16 @@ def import_data(path):
                     "url": "https://netfile-viz.netlify.app/",
                 }
             ]
-            response = requests.post(discord, json=data)
+            # response = requests.post(discord, json=data)
 
-        contributions = pd.concat([contributions, old_contributions]).drop_duplicates(
-            keep="first"
-        )
+        contributions = pd.concat([contributions, old_contributions])
+        contributions = contributions[~contributions.index.duplicated(keep="first")]
         donors = pd.concat([donors, old_donors]).drop_duplicates(keep="first")
+        donors = donors[~donors.index.duplicated(keep="first")]
         committees = pd.concat([committees, old_committees]).drop_duplicates(
             keep="first"
         )
+        committees = committees[~committees.index.duplicated(keep="first")]
 
         if not dry:
             # conn.execute(text("drop table if exists contributions"))
